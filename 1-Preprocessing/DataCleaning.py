@@ -4,7 +4,7 @@ import numpy as np
 def main():
     # Faz a leitura do arquivo
     names = ['survival','still-alive','age-at-heart-attack','pericardial-effusion','fractional-shortening', 'epss', 'lvdd', 'wall-motion-score', 'wall-motion-index', 'mult', 'name', 'group', 'alive-at-1']
-    features = ['survival','still-alive','age-at-heart-attack','pericardial-effusion','fractional-shortening', 'epss', 'lvdd', 'wall-motion-score', 'wall-motion-index', 'mult', 'group', 'alive-at-1']
+    features = ['survival','still-alive','age-at-heart-attack','pericardial-effusion','fractional-shortening', 'epss', 'lvdd', 'wall-motion-score', 'wall-motion-index', 'alive-at-1']
     output_file = '0-Datasets/echocardiogramClear.data'
     input_file = '0-Datasets/echocardiogram.data'
     df = pd.read_csv(input_file,         # Nome do arquivo com dados
