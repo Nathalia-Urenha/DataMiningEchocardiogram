@@ -9,7 +9,7 @@ plt.style.use('ggplot')
 def main():
     # Faz a leitura do arquivo
     input_file = '0-Datasets/echocardiogramClear.data'
-    names = ['survival','still-alive','age-at-heart-attack','pericardial-effusion','fractional-shortening', 'epss', 'lvdd', 'wall-motion-score', 'wall-motion-index', 'mult', 'group', 'alive-at-1']
+    names = ['survival','still-alive','age-at-heart-attack','pericardial-effusion','fractional-shortening', 'epss', 'lvdd', 'wall-motion-score', 'wall-motion-index', 'alive-at-1']
     
     df = pd.read_csv(input_file, names = names)                     
 
@@ -49,17 +49,18 @@ def main():
     print('Quantidade de atributos em cada classe', qtd_atr)
 
     #Histograma do atributo idade
-    bin = []
-    for number in frequencias:
-        bin.append(int(number[0:3]))
+    # bin = []
+    # for number in frequencias:
+        # bin.append(int(number[0:3]))
 
-    last_range = frequencias.pop()
+    # last_range = frequencias.pop()
 
-    bin.append(int(last_range[5:7]))
+    # bin.append(int(last_range[5:7]))
 
-    print(bin)
-    print(array_age)
-    plt.hist(array_age, bins=bin, edgecolor='black')
+    my_bins = [35, 44, 53, 62, 71, 80, 89]
+    plt.xlim(35, 89)
+    plt.xticks(my_bins)
+    plt.hist(array_age, bins=my_bins, edgecolor='black')
     plt.show()
     
 
