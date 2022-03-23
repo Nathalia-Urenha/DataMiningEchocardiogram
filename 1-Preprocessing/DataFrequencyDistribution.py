@@ -9,7 +9,7 @@ plt.style.use('ggplot')
 def main():
     # Faz a leitura do arquivo
     input_file = '0-Datasets/echocardiogramClear.data'
-    names = ['survival','still-alive','age-at-heart-attack','pericardial-effusion','fractional-shortening', 'epss', 'lvdd', 'wall-motion-score', 'wall-motion-index', 'mult', 'group', 'alive-at-1']
+    names = ['survival','still-alive','age-at-heart-attack','pericardial-effusion','fractional-shortening', 'epss', 'lvdd', 'wall-motion-score', 'wall-motion-index', 'alive-at-1']
     
     df = pd.read_csv(input_file, names = names)                     
 
@@ -60,6 +60,10 @@ def main():
     print(bin)
     print(array_age)
     plt.hist(array_age, bins=bin, edgecolor='black')
+    plt.xlabel("Idade")
+    plt.ylabel("Distribuição da idade")
+    plt.title("Histograma de Distribuição de idade")
+    plt.savefig('1-Preprocessing/histogram.png', format='png')
     plt.show()
     
 
