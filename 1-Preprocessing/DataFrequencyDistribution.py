@@ -1,4 +1,5 @@
 from math import ceil
+from tracemalloc import stop
 import pandas as pd
 import numpy as np
 from sklearn.decomposition import PCA
@@ -29,8 +30,6 @@ def main():
     #Calcular a amplitude de classe
     range = ceil((age_max - age_min)/number_classes)
 
-
-
     #Definir os limites inferiores e superiores das classes
     frequencias = []
     valor = age_min
@@ -41,12 +40,12 @@ def main():
     print('frequencias', frequencias)
 
     #Rotular os valores dos atributos de acordo com sua classe
-    freq_abs = pd.qcut(df_age,len(frequencias),labels=frequencias) # Discretização dos valores em k faixas, rotuladas pela lista criada anteriormente
+    freq_abs = pd.cut(df_age, bins=[34,43,52,61,70,79,89]) # Discretização dos valores em k faixas, rotuladas pela lista criada anteriormente
     print(freq_abs)
-    
+
     #quantidade de atributos idade que tem em cada classe
     qtd_atr = (pd.value_counts(freq_abs)) 
-    print('Quantidade de atributos em cada classe', qtd_atr)
+    print('Quantidade de atributos em cada classe\n', qtd_atr)
 
     #Histograma do atributo idade
     bin = []
