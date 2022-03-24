@@ -65,6 +65,7 @@ def VisualizePcaProjection(finalDf, targetColumn):
                    c = color, s = 50)
     ax.legend(targets)
     ax.grid()
+    plt.savefig('1-Preprocessing/PCAProjection.png', format='png')
     plt.show()
 
 
