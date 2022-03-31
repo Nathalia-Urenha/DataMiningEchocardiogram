@@ -51,10 +51,6 @@ def main():
     freq_abs = pd.cut(df_age, bins=bin) # Discretização dos valores em k faixas, rotuladas pela lista criada anteriormente
     print(freq_abs)
 
-    #quantidade de atributos idade que tem em cada classe
-    qtd_atr = (pd.value_counts(freq_abs)) 
-    print('Quantidade de atributos em cada classe\n', qtd_atr)
-
     #Histograma do atributo idade
     plt.xlabel("Idade")
     plt.ylabel("Distribuição da idade")
