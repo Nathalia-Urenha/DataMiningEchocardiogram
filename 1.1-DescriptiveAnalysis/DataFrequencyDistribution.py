@@ -63,7 +63,7 @@ def main():
     plt.xlim(35, 89)
     plt.xticks(bin)
     plt.hist(array_age, bins=bin, edgecolor='black')
-    plt.savefig('1-Preprocessing/histogram.png', format='png')
+    plt.savefig('1.1-DescriptiveAnalysis/histogram.png', format='png')
     plt.show()
     
 
