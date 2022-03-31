@@ -13,13 +13,19 @@ def main():
     meanAge = df['age-at-heart-attack'].mean()
     modeAge = df['age-at-heart-attack'].mode()
     medianAge = statistics.median(age)
-    mediumPointAge = (sortedAge[0] + sortedAge[len(sortedAge)-1])/2
+    avgPointAge = (sortedAge[0] + sortedAge[len(sortedAge)-1])/2
+    weightedAverageAge = (df['age-at-heart-attack'].sum())/len(age)
+    geometricMeanAge = statistics.geometric_mean(age)
+    harmonicMeanAge = statistics.harmonic_mean(age)
 
     print("Média de pessoas que sofreram de ataques cardíacos")
     print("Média = " + str(meanAge))
     print("Moda = " + str(modeAge[0]))
     print("Mediana = " + str(medianAge))
-    print("Ponto Médio = " + str(mediumPointAge))
+    print("Ponto Médio = " + str(avgPointAge))
+    print("Média Ponderada = " + str(weightedAverageAge))
+    print("Média Geométrica = " + str(geometricMeanAge))
+    print("Média Harmônica = " + str(harmonicMeanAge))
 
 if __name__ == "__main__":
     main()
