@@ -78,7 +78,7 @@ def plot3DPCA(df, features):
 
     total_var = pca.explained_variance_ratio_.sum() * 100
 
-    group_color = ['black', 'lightsalmon']
+    group_color = ['red', 'green']
 
     fig = px.scatter_3d(
         components, x=0, y=1, z=2, color=df['alive-at-1'].apply(str),
