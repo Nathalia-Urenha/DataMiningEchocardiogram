@@ -40,14 +40,6 @@ def main():
     print('frequencias', frequencias)
 
     #Rotular os valores dos atributos de acordo com sua classe
-    freq_abs = pd.cut(df_age, bins=[34,43,52,61,70,79,89]) # Discretização dos valores em k faixas, rotuladas pela lista criada anteriormente
-    print(freq_abs)
-
-    #quantidade de atributos idade que tem em cada classe
-    qtd_atr = (pd.value_counts(freq_abs)) 
-    print('Quantidade de atributos em cada classe\n', qtd_atr)
-
-    #Histograma do atributo idade
     bin = []
     for number in frequencias:
         bin.append(int(number[0:3]))
@@ -56,7 +48,14 @@ def main():
 
     bin.append(int(last_range[5:7]))
 
-    
+    freq_abs = pd.cut(df_age, bins=bin) # Discretização dos valores em k faixas, rotuladas pela lista criada anteriormente
+    print(freq_abs)
+
+    #quantidade de atributos idade que tem em cada classe
+    qtd_atr = (pd.value_counts(freq_abs)) 
+    print('Quantidade de atributos em cada classe\n', qtd_atr)
+
+    #Histograma do atributo idade
     plt.xlabel("Idade")
     plt.ylabel("Distribuição da idade")
     plt.title("Histograma de Distribuição de idade")
