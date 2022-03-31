@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 import matplotlib.pyplot as plt
+import plotly.express as px
 
 def main():
     # Faz a leitura do arquivo
@@ -40,6 +41,7 @@ def main():
     ShowInformationDataFrame(finalDf,"Dataframe PCA")
     
     VisualizePcaProjection(finalDf, target)
+    plot3DPCA(normalizedDf, features)
 
 
 def ShowInformationDataFrame(df, message=""):
@@ -67,6 +69,24 @@ def VisualizePcaProjection(finalDf, targetColumn):
     ax.grid()
     plt.savefig('1-Preprocessing/PCAProjection.png', format='png')
     plt.show()
+
+def plot3DPCA(df, features):
+    X=df[features]
+
+    pca = PCA(n_components=3)
+    components = pca.fit_transform(X)
+
+    total_var = pca.explained_variance_ratio_.sum() * 100
+
+    group_color = ['black', 'lightsalmon']
+
+    fig = px.scatter_3d(
+        components, x=0, y=1, z=2, color=df['alive-at-1'].apply(str),
+        title=f'Total Explained Variance: {total_var:.2f}%',
+        labels={'0': 'PC 1', '1': 'PC 2', '2': 'PC 3'},
+        color_discrete_sequence = group_color
+    )
+    fig.show()
 
 
 if __name__ == "__main__":
