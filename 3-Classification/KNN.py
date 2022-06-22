@@ -7,26 +7,28 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import f1_score
 from sklearn.metrics import confusion_matrix
-from sklearn import datasets
+from sklearn.model_selection import cross_val_score
 from sklearn.neighbors import KNeighborsClassifier
 from collections import Counter
 
 # Calculate distance between two points
-def minkowski_distance(a, b, p=1):    
+
+
+def minkowski_distance(a, b, p=1):
     # Store the number of dimensions
-    dim = len(a)    
+    dim = len(a)
     # Set initial distance to 0
     distance = 0
-    
+
     # Calculate minkowski distance using parameter p
     for d in range(dim):
         distance += abs(a[d] - b[d])**p
-        
-    distance = distance**(1/p)    
+
+    distance = distance**(1/p)
     return distance
 
 
-def knn_predict(X_train, X_test, y_train, y_test, k, p):    
+def knn_predict(X_train, X_test, y_train, y_test, k, p):
     # Make predictions on the test data
     # Need output of 1 prediction per test data point
     y_hat_test = []
@@ -37,11 +39,11 @@ def knn_predict(X_train, X_test, y_train, y_test, k, p):
         for train_point in X_train:
             distance = minkowski_distance(test_point, train_point, p=p)
             distances.append(distance)
-        
+
         # Store distances in a dataframe
-        df_dists = pd.DataFrame(data=distances, columns=['dist'], 
+        df_dists = pd.DataFrame(data=distances, columns=['dist'],
                                 index=y_train.index)
-        
+
         # Sort distances, and only consider the k closest points
         df_nn = df_dists.sort_values(by=['dist'], axis=0)[:k]
 
@@ -50,10 +52,10 @@ def knn_predict(X_train, X_test, y_train, y_test, k, p):
 
         # Get most common label of all the nearest neighbors
         prediction = counter.most_common()[0][0]
-        
+
         # Append prediction to output list
         y_hat_test.append(prediction)
-        
+
     return y_hat_test
 
 
@@ -83,13 +85,13 @@ def plot_confusion_matrix(cm, classes,
 
     thresh = cm.max() / 2.
     for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-        plt.text(j, i, cm[i, j],
+        plt.text(j, i, round(cm[i, j], 2),
                  horizontalalignment="center",
-                 color="white" if cm[i, j] > thresh else "black")
+                 color="black" if cm[i, j] > thresh else "black")
 
     plt.tight_layout()
     plt.ylabel('True label')
-    plt.xlabel('Predicted label')    
+    plt.xlabel('Predicted label')
 
 
 def main():
@@ -109,12 +111,15 @@ def main():
     data.head()
 
     # Separate X and y data
+
     X = data
     y = target   
+    
     print("Total samples: {}".format(X.shape[0]))
 
-    # Split the data - 75% train, 25% test
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=1)
+    # Split the data - 70% train, 30% test
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.3, random_state=1)
     print("Total train samples: {}".format(X_train.shape[0]))
     print("Total test  samples: {}".format(X_test.shape[0]))
 
@@ -122,8 +127,8 @@ def main():
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
-        
-    # STEP 1 - TESTS USING knn classifier write from scratch    
+
+    # STEP 1 - TESTS USING knn classifier write from scratch
     # Make predictions on test dataset using knn classifier
     y_hat_test = knn_predict(X_train, X_test, y_train, y_test, k=5, p=2)
 
@@ -135,25 +140,32 @@ def main():
 
     # Get test confusion matrix
     cm = confusion_matrix(y_test, y_hat_test)
-    print(cm)        
-    plot_confusion_matrix(cm, labels, False, "Confusion Matrix - K-NN")      
-    plot_confusion_matrix(cm, labels, True, "Confusion Matrix - K-NN normalized")  
+    plot_confusion_matrix(cm, labels, False,
+                          "Confusion Matrix - K-NN")
+    plot_confusion_matrix(cm, labels, True,
+                          "Confusion Matrix - K-NN normalized")
 
     # STEP 2 - TESTS USING knn classifier from sk-learn
     knn = KNeighborsClassifier(n_neighbors=5)
     knn.fit(X_train, y_train)
     y_hat_test = knn.predict(X_test)
 
-     # Get test accuracy score
+    # Get test accuracy score
     accuracy = accuracy_score(y_test, y_hat_test)*100
-    f1 = f1_score(y_test, y_hat_test,average='macro')
+    f1 = f1_score(y_test, y_hat_test, average='macro')
     print("Acurracy K-NN from sk-learn: {:.2f}%".format(accuracy))
     print("F1 Score K-NN from sk-learn: {:.2f}%".format(f1))
 
-    # Get test confusion matrix    
-    cm = confusion_matrix(y_test, y_hat_test)        
-    plot_confusion_matrix(cm, labels, False, "Confusion Matrix - K-NN sklearn")      
-    plot_confusion_matrix(cm, labels, True, "Confusion Matrix - K-NN sklearn normalized" )  
+    # Get test confusion matrix
+    cm = confusion_matrix(y_test, y_hat_test)
+    plot_confusion_matrix(cm, labels, False,
+                          "Confusion Matrix - K-NN sklearn")
+    plot_confusion_matrix(cm, labels, True,
+                          "Confusion Matrix - K-NN sklearn normalized")
+    cross_validation = cross_val_score(knn, X, y, cv=10, scoring='accuracy')
+    print(cross_validation)
+    print("Média cross validation = " + str(cross_validation.mean()) + "\n")
+
     plt.show()
 
 

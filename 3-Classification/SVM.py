@@ -1,14 +1,18 @@
+# Initial imports
 import itertools
+from numpy.lib.function_base import i0
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import cross_val_score
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import f1_score
 from sklearn.metrics import confusion_matrix
 from sklearn import datasets
 from sklearn.svm import SVC
+
 
 def plot_confusion_matrix(cm, classes,
                           normalize=False,
@@ -39,12 +43,11 @@ def plot_confusion_matrix(cm, classes,
     for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
         plt.text(j, i, cm[i, j],
                  horizontalalignment="center",
-                 color="white" if cm[i, j] > thresh else "black")
+                 color="black" if cm[i, j] > thresh else "black")
 
     plt.tight_layout()
     plt.ylabel('True label')
-    plt.xlabel('Predicted label')    
-
+    plt.xlabel('Predicted label')
 
 
 def main():
@@ -61,16 +64,16 @@ def main():
     target = df['alive-at-1']
 
     labels = ['survival', 'no survival']
-    
+
     print(df.head())
 
     # Separate X and y data
     X = data
-    y = target   
+    y = target
     print("Total samples: {}".format(X.shape[0]))
 
-    # Split the data - 75% train, 25% test
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.25, random_state=1)
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.3, random_state=1)
     print("Total train samples: {}".format(X_train.shape[0]))
     print("Total test  samples: {}".format(X_test.shape[0]))
 
@@ -79,8 +82,8 @@ def main():
     X_train = scaler.fit_transform(X_train)
     X_test = scaler.transform(X_test)
 
-    # TESTS USING SVM classifier from sk-learn    
-    svm = SVC(kernel='poly') # poly, rbf, linear
+    # TESTS USING SVM classifier from sk-learn
+    svm = SVC(kernel='poly')  # poly, rbf, linear
     # training using train dataset
     svm.fit(X_train, y_train)
     # get support vectors
@@ -93,17 +96,21 @@ def main():
     # predict using test dataset
     y_hat_test = svm.predict(X_test)
 
-     # Get test accuracy score
+    # Get test accuracy score
     accuracy = accuracy_score(y_test, y_hat_test)*100
-    f1 = f1_score(y_test, y_hat_test,average='macro')
+    f1 = f1_score(y_test, y_hat_test, average='macro')
     print("Acurracy SVM from sk-learn: {:.2f}%".format(accuracy))
     print("F1 Score SVM from sk-learn: {:.2f}%".format(f1))
 
-    # Get test confusion matrix    
-    cm = confusion_matrix(y_test, y_hat_test)        
-    print(cm)
-    plot_confusion_matrix(cm, labels, False, "Confusion Matrix - SVM sklearn")      
-    plot_confusion_matrix(cm, labels, True, "Confusion Matrix - SVM sklearn normalized" )  
+    # Get test confusion matrix
+    cm = confusion_matrix(y_test, y_hat_test)
+    plot_confusion_matrix(cm, labels, False,
+                          "Confusion Matrix - SVM sklearn")
+    plot_confusion_matrix(cm, labels, True,
+                          "Confusion Matrix - SVM sklearn normalized")
+    cross_validation = cross_val_score(svm, X, y, cv=10, scoring='accuracy')
+    print(cross_validation)
+    print("Média cross validation = " + str(cross_validation.mean()) + "\n")
     plt.show()
 
 

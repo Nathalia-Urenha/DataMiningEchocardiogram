@@ -43,7 +43,7 @@ def main():
     plot_samples(projected, target, 'Original Labels') 
     
     #Applying sklearn GMM function
-    gm  = GaussianMixture(n_components=10).fit(projected)
+    gm  = GaussianMixture(n_components=6).fit(projected)
     print(gm.weights_)
     print(gm.means_)
     x = gm.predict(projected)
